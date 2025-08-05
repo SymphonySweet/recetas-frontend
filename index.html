@@ -22,7 +22,7 @@
             <h3 class="m-0">Tienda de Recetas</h3>
         </a>
         <ul class="nav nav-pills">
-            <li class="nav-item"><a href="#inicio" class="nav-link active">Principio</a></li>
+            <li class="nav-item"><a href="#inicio" class="nav-link active">Inicio</a></li>
             <li class="nav-item"><a href="#productos" class="nav-link">Productos</a></li>
             <li class="nav-item"><a href="#recetas" class="nav-link">Recetas</a></li>
             <li class="nav-item"><a href="#faq" class="nav-link">Preguntas Frecuentes</a></li>
@@ -45,7 +45,7 @@
 <!-- RECETAS -->
 <div class="container" id="recetas">
     <h2 class="section-title">Recetas</h2>
-    <p>Aquí podrás editar las recetas y descripciones de tus platos.</p>
+    <p>Aquí podrás ver y editar las recetas de tus platos.</p>
 </div>
 
 <!-- MODAL CARRITO -->
@@ -98,11 +98,11 @@
         <form id="form-receta">
           <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" id="titulo" class="form-control" required>
+            <input type="text" id="title" class="form-control" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Descripción</label>
-            <textarea id="descripcion" class="form-control"></textarea>
+            <textarea id="description" class="form-control"></textarea>
           </div>
           <div class="mb-3">
             <label class="form-label">Imagen (URL)</label>
@@ -110,7 +110,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Precio (S/)</label>
-            <input type="number" id="precio" class="form-control" step="0.01">
+            <input type="number" id="price" class="form-control" step="0.01">
           </div>
           <button type="submit" class="btn btn-success">Guardar Receta</button>
         </form>
@@ -172,14 +172,14 @@ document.getElementById("form-receta").addEventListener("submit", async function
     e.preventDefault();
 
     const receta = {
-        title: document.getElementById("titulo").value,
-        description: document.getElementById("descripcion").value,
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
         imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
-        price: parseFloat(document.getElementById("precio").value) || 0
+        price: parseFloat(document.getElementById("price").value) || 0
     };
 
     try {
-        const res = await fetch(`${API_URL}/recipes/`, {
+        const res = await fetch(`${API_URL}/recipes`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(receta)
@@ -208,3 +208,5 @@ document.addEventListener("DOMContentLoaded", cargarRecetas);
 </script>
 </body>
 </html>
+
+
