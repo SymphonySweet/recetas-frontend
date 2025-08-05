@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tienda de Recetas</title>
+<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+<link rel="icon" href="assets/media/img/icon.png">
+<style>
+    body { scroll-behavior: smooth; }
+    .section-title { margin-top: 60px; }
+    .price { font-weight: bold; color: #28a745; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="#inicio" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <img src="assets/media/img/icon.png" alt="icono" height="32" class="me-2">
+            <h3 class="m-0">Tienda de Recetas</h3>
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="#inicio" class="nav-link active">Principio</a></li>
+            <li class="nav-item"><a href="#productos" class="nav-link">Productos</a></li>
+            <li class="nav-item"><a href="#recetas" class="nav-link">Recetas</a></li>
+            <li class="nav-item"><a href="#faq" class="nav-link">Preguntas Frecuentes</a></li>
+            <li class="nav-item"><a href="#acerca" class="nav-link">Acerca de Nosotros</a></li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">🛒 Carrito <span id="cart-count" class="badge bg-success">0</span></a>
+            </li>
+        </ul>
+    </header>
+</div>
+
+<!-- PRODUCTOS -->
+<div class="container" id="productos">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <script>
+            const productos = [
+                {id:1, nombre:"Plato 1", img:"assets/media/img/plato1.jpg", desc:"Receta deliciosa con ingredientes frescos para toda la familia.", tiempo:"20m", precio:25},
+                {id:2, nombre:"Plato 2", img:"assets/media/img/plato2.jpg", desc:"Plato especial con especias exóticas y un toque único.", tiempo:"25m", precio:30},
+                {id:3, nombre:"Plato 3", img:"assets/media/img/plato3.jpg", desc:"Ideal para una cena ligera y saludable.", tiempo:"15m", precio:20},
+                {id:4, nombre:"Plato 4", img:"assets/media/img/plato4.jpg", desc:"Fresco, sabroso y perfecto para compartir.", tiempo:"30m", precio:28},
+                {id:5, nombre:"Plato 5", img:"assets/media/img/plato5.jpg", desc:"Un clásico que nunca falla en la mesa.", tiempo:"40m", precio:35},
+                {id:6, nombre:"Plato 6", img:"assets/media/img/plato6.jpg", desc:"Sabor intenso y textura perfecta.", tiempo:"35m", precio:32},
+                {id:7, nombre:"Plato 7", img:"assets/media/img/plato7.jpg", desc:"Delicioso y nutritivo.", tiempo:"22m", precio:27},
+                {id:8, nombre:"Plato 8", img:"assets/media/img/plato8.jpg", desc:"Fusión de sabores irresistibles.", tiempo:"28m", precio:29},
+                {id:9, nombre:"Plato 9", img:"assets/media/img/plato9.jpg", desc:"Receta innovadora para sorprender.", tiempo:"18m", precio:26}
+            ];
+        </script>
+    </div>
+</div>
+
+<!-- RECETAS -->
+<div class="container" id="recetas">
+    <h2 class="section-title">Recetas</h2>
+    <p>Aquí podrás editar las recetas y descripciones de tus platos.</p>
+    <ul>
+        <li><b>Plato 1:</b> 500g carne, especias, salsa de tomate...</li>
+        <li><b>Plato 2:</b> Crema de espinacas, huevo cocido, condimentos...</li>
+        <li><b>Plato 3:</b> Pasta, vegetales frescos, aceite de oliva...</li>
+    </ul>
+</div>
+
+<!-- FAQ -->
+<div class="container" id="faq">
+    <h2 class="section-title">Preguntas Frecuentes</h2>
+    <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    ¿Qué métodos de pago aceptan?
+                </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse show">
+                <div class="accordion-body">
+                    Aceptamos tarjetas de crédito, débito, PayPal, Yape y Plin.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ACERCA DE -->
+<div class="container" id="acerca">
+    <h2 class="section-title">Acerca de Nosotros</h2>
+    <p>Somos un equipo apasionado por la cocina y el buen servicio. Puedes encontrarnos en nuestras redes:</p>
+    <ul>
+        <li>Instagram: @tiendaderecetas</li>
+        <li>Facebook: Tienda de Recetas Oficial</li>
+        <li>Email: contacto@tiendaderecetas.com</li>
+    </ul>
+</div>
+
+<!-- MODAL CARRITO -->
+<div class="modal fade" id="cartModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Carrito de Compras</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body" id="cart-items"></div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal">Pagar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGO -->
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Finalizar Compra</h5></div>
+      <div class="modal-body">
+        <input type="text" class="form-control mb-2" placeholder="Nombre completo">
+        <input type="email" class="form-control mb-2" placeholder="Correo electrónico">
+        <input type="text" class="form-control mb-2" placeholder="Dirección de envío">
+        <select class="form-select mb-2">
+            <option selected>Método de pago</option>
+            <option value="visa">💳 Tarjeta VISA</option>
+            <option value="paypal">💲 PayPal</option>
+            <option value="yape">📱 Yape</option>
+            <option value="plin">📱 Plin</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-success" onclick="alert('Compra confirmada. ¡Gracias por tu pedido!')">Confirmar Compra</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script>
+    const row = document.querySelector('.row');
+    let cart = [];
+
+    productos.forEach(p => {
+        const col = document.createElement('div');
+        col.className = 'col';
+        col.innerHTML = `
+            <div class="card">
+                <img src="${p.img}" class="card-img-top" style="height: 250px; object-fit:cover;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">${p.nombre}</h5>
+                    <p class="card-text">${p.desc}</p>
+                    <p class="price">S/ ${p.precio.toFixed(2)}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="addToCart(${p.id})">Comprar</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="alert('Mostrando receta de ${p.nombre}')">Ver Receta</button>
+                        </div>
+                        <small class="text-muted">Tiempo: ${p.tiempo}</small>
+                    </div>
+                </div>
+            </div>`;
+        row.appendChild(col);
+    });
+
+    function addToCart(id){
+        const product = productos.find(p=>p.id===id);
+        cart.push(product);
+        document.getElementById('cart-count').innerText = cart.length;
+        renderCart();
+    }
+    function renderCart(){
+        const cartItems = document.getElementById('cart-items');
+        cartItems.innerHTML = '';
+        let total = 0;
+        cart.forEach((item, index) => {
+            total += item.precio;
+            cartItems.innerHTML += `<div>${item.nombre} - S/ ${item.precio.toFixed(2)} <button class="btn btn-sm btn-danger float-end" onclick="removeFromCart(${index})">X</button></div>`;
+        });
+        cartItems.innerHTML += `<hr><b>Total: S/ ${total.toFixed(2)}</b>`;
+    }
+    function removeFromCart(index){
+        cart.splice(index,1);
+        document.getElementById('cart-count').innerText = cart.length;
+        renderCart();
+    }
+</script>
+</body>
+</html>
+
+
+
