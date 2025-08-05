@@ -98,7 +98,7 @@
         <form id="form-receta">
           <div class="mb-3">
             <label class="form-label">Nombre</label>
-            <input type="text" id="nombre" class="form-control" required>
+            <input type="text" id="titulo" class="form-control" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Descripción</label>
@@ -172,7 +172,7 @@ document.getElementById("form-receta").addEventListener("submit", async function
     e.preventDefault();
 
     const receta = {
-        title: document.getElementById("nombre").value,
+        title: document.getElementById("titulo").value,
         description: document.getElementById("descripcion").value,
         imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
         price: parseFloat(document.getElementById("precio").value) || 0
@@ -208,5 +208,3 @@ document.addEventListener("DOMContentLoaded", cargarRecetas);
 </script>
 </body>
 </html>
-
-
