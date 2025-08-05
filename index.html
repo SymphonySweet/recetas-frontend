@@ -148,9 +148,9 @@ function mostrarRecetas(recetas) {
             <div class="card">
                 <img src="${receta.imagen || 'assets/img/default.jpg'}" class="card-img-top" style="height: 250px; object-fit:cover;">
                 <div class="card-body">
-                    <h5 class="card-title text-center">${receta.nombre}</h5>
-                    <p class="card-text">${receta.descripcion || ''}</p>
-                    <p class="price">S/ ${receta.precio ? receta.precio.toFixed(2) : '0.00'}</p>
+                    <h5 class="card-title text-center">${receta.title}</h5>
+                    <p class="card-text">${receta.description || ''}</p>
+                    <p class="price">S/ ${receta.price ? receta.price.toFixed(2) : '0.00'}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <button class="btn btn-sm btn-outline-secondary" onclick="agregarAlCarrito('${receta.id}')">Comprar</button>
                     </div>
@@ -172,10 +172,10 @@ document.getElementById("form-receta").addEventListener("submit", async function
     e.preventDefault();
 
     const receta = {
-        nombre: document.getElementById("nombre").value,
-        descripcion: document.getElementById("descripcion").value,
+        title: document.getElementById("nombre").value,
+        description: document.getElementById("descripcion").value,
         imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
-        precio: parseFloat(document.getElementById("precio").value) || 0
+        price: parseFloat(document.getElementById("precio").value) || 0
     };
 
     try {
