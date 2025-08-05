@@ -30,68 +30,22 @@
             <li class="nav-item">
                 <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">🛒 Carrito <span id="cart-count" class="badge bg-success">0</span></a>
             </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#addRecipeModal">➕ Nueva Receta</a>
+            </li>
         </ul>
     </header>
 </div>
 
 <!-- PRODUCTOS -->
 <div class="container" id="productos">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <script>
-            const productos = [
-                {id:1, nombre:"Plato 1", img:"assets/media/img/plato1.jpg", desc:"Receta deliciosa con ingredientes frescos para toda la familia.", tiempo:"20m", precio:25},
-                {id:2, nombre:"Plato 2", img:"assets/media/img/plato2.jpg", desc:"Plato especial con especias exóticas y un toque único.", tiempo:"25m", precio:30},
-                {id:3, nombre:"Plato 3", img:"assets/media/img/plato3.jpg", desc:"Ideal para una cena ligera y saludable.", tiempo:"15m", precio:20},
-                {id:4, nombre:"Plato 4", img:"assets/media/img/plato4.jpg", desc:"Fresco, sabroso y perfecto para compartir.", tiempo:"30m", precio:28},
-                {id:5, nombre:"Plato 5", img:"assets/media/img/plato5.jpg", desc:"Un clásico que nunca falla en la mesa.", tiempo:"40m", precio:35},
-                {id:6, nombre:"Plato 6", img:"assets/media/img/plato6.jpg", desc:"Sabor intenso y textura perfecta.", tiempo:"35m", precio:32},
-                {id:7, nombre:"Plato 7", img:"assets/media/img/plato7.jpg", desc:"Delicioso y nutritivo.", tiempo:"22m", precio:27},
-                {id:8, nombre:"Plato 8", img:"assets/media/img/plato8.jpg", desc:"Fusión de sabores irresistibles.", tiempo:"28m", precio:29},
-                {id:9, nombre:"Plato 9", img:"assets/media/img/plato9.jpg", desc:"Receta innovadora para sorprender.", tiempo:"18m", precio:26}
-            ];
-        </script>
-    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="lista-recetas"></div>
 </div>
 
 <!-- RECETAS -->
 <div class="container" id="recetas">
     <h2 class="section-title">Recetas</h2>
     <p>Aquí podrás editar las recetas y descripciones de tus platos.</p>
-    <ul>
-        <li><b>Plato 1:</b> 500g carne, especias, salsa de tomate...</li>
-        <li><b>Plato 2:</b> Crema de espinacas, huevo cocido, condimentos...</li>
-        <li><b>Plato 3:</b> Pasta, vegetales frescos, aceite de oliva...</li>
-    </ul>
-</div>
-
-<!-- FAQ -->
-<div class="container" id="faq">
-    <h2 class="section-title">Preguntas Frecuentes</h2>
-    <div class="accordion" id="faqAccordion">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                    ¿Qué métodos de pago aceptan?
-                </button>
-            </h2>
-            <div id="faq1" class="accordion-collapse collapse show">
-                <div class="accordion-body">
-                    Aceptamos tarjetas de crédito, débito, PayPal, Yape y Plin.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ACERCA DE -->
-<div class="container" id="acerca">
-    <h2 class="section-title">Acerca de Nosotros</h2>
-    <p>Somos un equipo apasionado por la cocina y el buen servicio. Puedes encontrarnos en nuestras redes:</p>
-    <ul>
-        <li>Instagram: @tiendaderecetas</li>
-        <li>Facebook: Tienda de Recetas Oficial</li>
-        <li>Email: contacto@tiendaderecetas.com</li>
-    </ul>
 </div>
 
 <!-- MODAL CARRITO -->
@@ -132,57 +86,137 @@
   </div>
 </div>
 
+<!-- MODAL AGREGAR RECETA -->
+<div class="modal fade" id="addRecipeModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Nueva Receta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-receta">
+          <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input type="text" id="title" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea id="description" class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ingredientes (separados por coma)</label>
+            <input type="text" id="ingredients" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Instrucciones</label>
+            <textarea id="instructions" class="form-control"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Creado por</label>
+            <input type="email" id="created_by" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Precio (S/)</label>
+            <input type="number" id="price" class="form-control" step="0.01">
+          </div>
+          <button type="submit" class="btn btn-success">Guardar Receta</button>
+        </form>
+        <div id="mensaje" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="assets/js/bootstrap.bundle.min.js"></script>
 <script>
-    const row = document.querySelector('.row');
-    let cart = [];
+const API_URL = "https://recetas-backend-rab7.onrender.com";
+let carrito = [];
 
-    productos.forEach(p => {
-        const col = document.createElement('div');
-        col.className = 'col';
-        col.innerHTML = `
+// Cargar recetas desde el backend
+async function cargarRecetas() {
+    try {
+        const respuesta = await fetch(`${API_URL}/recipes/`);
+        if (!respuesta.ok) throw new Error("Error al obtener recetas");
+        const recetas = await respuesta.json();
+        mostrarRecetas(recetas);
+    } catch (error) {
+        console.error("Error cargando recetas:", error);
+    }
+}
+
+// Mostrar recetas en la página
+function mostrarRecetas(recetas) {
+    const contenedor = document.getElementById("lista-recetas");
+    contenedor.innerHTML = "";
+    recetas.forEach(receta => {
+        const tarjeta = document.createElement("div");
+        tarjeta.className = "col";
+        tarjeta.innerHTML = `
             <div class="card">
-                <img src="${p.img}" class="card-img-top" style="height: 250px; object-fit:cover;">
+                <img src="${receta.imagen || 'assets/img/default.jpg'}" class="card-img-top" style="height: 250px; object-fit:cover;">
                 <div class="card-body">
-                    <h5 class="card-title text-center">${p.nombre}</h5>
-                    <p class="card-text">${p.desc}</p>
-                    <p class="price">S/ ${p.precio.toFixed(2)}</p>
+                    <h5 class="card-title text-center">${receta.nombre}</h5>
+                    <p class="card-text">${receta.descripcion}</p>
+                    <p class="price">S/ ${receta.precio.toFixed(2)}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <div class="btn-group">
-                            <button class="btn btn-sm btn-outline-secondary" onclick="addToCart(${p.id})">Comprar</button>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="alert('Mostrando receta de ${p.nombre}')">Ver Receta</button>
-                        </div>
-                        <small class="text-muted">Tiempo: ${p.tiempo}</small>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="agregarAlCarrito('${receta.id}')">Comprar</button>
                     </div>
                 </div>
-            </div>`;
-        row.appendChild(col);
+            </div>
+        `;
+        contenedor.appendChild(tarjeta);
     });
+}
 
-    function addToCart(id){
-        const product = productos.find(p=>p.id===id);
-        cart.push(product);
-        document.getElementById('cart-count').innerText = cart.length;
-        renderCart();
-    }
-    function renderCart(){
-        const cartItems = document.getElementById('cart-items');
-        cartItems.innerHTML = '';
-        let total = 0;
-        cart.forEach((item, index) => {
-            total += item.precio;
-            cartItems.innerHTML += `<div>${item.nombre} - S/ ${item.precio.toFixed(2)} <button class="btn btn-sm btn-danger float-end" onclick="removeFromCart(${index})">X</button></div>`;
+// Agregar al carrito
+function agregarAlCarrito(id) {
+    carrito.push(id);
+    document.getElementById("cart-count").innerText = carrito.length;
+}
+
+// Guardar nueva receta
+document.getElementById("form-receta").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const receta = {
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
+        ingredients: document.getElementById("ingredients").value.split(",").map(i => i.trim()),
+        instructions: document.getElementById("instructions").value,
+        created_by: document.getElementById("created_by").value,
+        price: parseFloat(document.getElementById("price").value)
+    };
+
+    try {
+        const res = await fetch(`${API_URL}/recipes/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(receta)
         });
-        cartItems.innerHTML += `<hr><b>Total: S/ ${total.toFixed(2)}</b>`;
+
+        if (!res.ok) throw new Error("Error al guardar receta");
+
+        const data = await res.json();
+        document.getElementById("mensaje").innerHTML = `
+            <div class="alert alert-success">
+                ✅ Receta agregada correctamente (ID: ${data.id})
+            </div>
+        `;
+        this.reset();
+        cargarRecetas();
+    } catch (error) {
+        document.getElementById("mensaje").innerHTML = `
+            <div class="alert alert-danger">
+                ❌ Error: ${error.message}
+            </div>
+        `;
     }
-    function removeFromCart(index){
-        cart.splice(index,1);
-        document.getElementById('cart-count').innerText = cart.length;
-        renderCart();
-    }
+});
+
+document.addEventListener("DOMContentLoaded", cargarRecetas);
 </script>
 </body>
 </html>
-
 
 
