@@ -97,28 +97,20 @@
       <div class="modal-body">
         <form id="form-receta">
           <div class="mb-3">
-            <label class="form-label">Título</label>
-            <input type="text" id="title" class="form-control" required>
+            <label class="form-label">Nombre</label>
+            <input type="text" id="nombre" class="form-control" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Descripción</label>
-            <textarea id="description" class="form-control"></textarea>
+            <textarea id="descripcion" class="form-control"></textarea>
           </div>
           <div class="mb-3">
-            <label class="form-label">Ingredientes (separados por coma)</label>
-            <input type="text" id="ingredients" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Instrucciones</label>
-            <textarea id="instructions" class="form-control"></textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Creado por</label>
-            <input type="email" id="created_by" class="form-control">
+            <label class="form-label">Imagen (URL)</label>
+            <input type="text" id="imagen" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
           </div>
           <div class="mb-3">
             <label class="form-label">Precio (S/)</label>
-            <input type="number" id="price" class="form-control" step="0.01">
+            <input type="number" id="precio" class="form-control" step="0.01">
           </div>
           <button type="submit" class="btn btn-success">Guardar Receta</button>
         </form>
@@ -133,10 +125,10 @@
 const API_URL = "https://recetas-backend-rab7.onrender.com";
 let carrito = [];
 
-// Cargar recetas desde el backend
+// Cargar recetas
 async function cargarRecetas() {
     try {
-        const respuesta = await fetch(`${API_URL}/recipes/`);
+        const respuesta = await fetch(`${API_URL}/recipes`);
         if (!respuesta.ok) throw new Error("Error al obtener recetas");
         const recetas = await respuesta.json();
         mostrarRecetas(recetas);
@@ -145,7 +137,7 @@ async function cargarRecetas() {
     }
 }
 
-// Mostrar recetas en la página
+// Mostrar recetas
 function mostrarRecetas(recetas) {
     const contenedor = document.getElementById("lista-recetas");
     contenedor.innerHTML = "";
@@ -157,8 +149,8 @@ function mostrarRecetas(recetas) {
                 <img src="${receta.imagen || 'assets/img/default.jpg'}" class="card-img-top" style="height: 250px; object-fit:cover;">
                 <div class="card-body">
                     <h5 class="card-title text-center">${receta.nombre}</h5>
-                    <p class="card-text">${receta.descripcion}</p>
-                    <p class="price">S/ ${receta.precio.toFixed(2)}</p>
+                    <p class="card-text">${receta.descripcion || ''}</p>
+                    <p class="price">S/ ${receta.precio ? receta.precio.toFixed(2) : '0.00'}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <button class="btn btn-sm btn-outline-secondary" onclick="agregarAlCarrito('${receta.id}')">Comprar</button>
                     </div>
@@ -175,17 +167,15 @@ function agregarAlCarrito(id) {
     document.getElementById("cart-count").innerText = carrito.length;
 }
 
-// Guardar nueva receta
+// Guardar receta
 document.getElementById("form-receta").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const receta = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        ingredients: document.getElementById("ingredients").value.split(",").map(i => i.trim()),
-        instructions: document.getElementById("instructions").value,
-        created_by: document.getElementById("created_by").value,
-        price: parseFloat(document.getElementById("price").value)
+        nombre: document.getElementById("nombre").value,
+        descripcion: document.getElementById("descripcion").value,
+        imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
+        precio: parseFloat(document.getElementById("precio").value) || 0
     };
 
     try {
