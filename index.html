@@ -146,7 +146,7 @@ function mostrarRecetas(recetas) {
         tarjeta.className = "col";
         tarjeta.innerHTML = `
             <div class="card">
-                <img src="${receta.imagen || 'assets/img/default.jpg'}" class="card-img-top" style="height: 250px; object-fit:cover;">
+                <img src="${receta.image || 'assets/img/default.jpg'}" class="card-img-top" style="height: 250px; object-fit:cover;">
                 <div class="card-body">
                     <h5 class="card-title text-center">${receta.title}</h5>
                     <p class="card-text">${receta.description || ''}</p>
@@ -174,12 +174,12 @@ document.getElementById("form-receta").addEventListener("submit", async function
     const receta = {
         title: document.getElementById("title").value,
         description: document.getElementById("description").value,
-        imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
+        image: document.getElementById("imagen").value || "assets/img/default.jpg",
         price: parseFloat(document.getElementById("price").value) || 0
     };
 
     try {
-        const res = await fetch(`${API_URL}/recipes`, {
+        const res = await fetch(`${API_URL}/recipes/`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(receta)
