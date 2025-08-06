@@ -1,212 +1,320 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tienda de Recetas</title>
-<link rel="stylesheet" href="assets/css/bootstrap.min.css">
-<link rel="icon" href="assets/media/img/icon.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cocina Conectada: Recetas en Línea</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link rel="icon" href="assets/media/img/icon.png" />
 <style>
-    body { scroll-behavior: smooth; }
-    .section-title { margin-top: 60px; }
-    .price { font-weight: bold; color: #28a745; }
+  body { scroll-behavior: smooth; background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  .navbar { background: #343a40; }
+  .navbar-brand, .nav-link { color: #e9ecef !important; font-weight: 600; }
+  .navbar-brand:hover, .nav-link:hover { color: #adb5bd !important; }
+  .section-title { margin-top: 60px; margin-bottom: 30px; font-weight: 700; color: #212529; }
+  .price { font-weight: 700; color: #198754; font-size: 1.1rem; }
+  .card { border: none; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.2s ease; }
+  .card:hover { transform: scale(1.02); }
+  .card-img-top { border-radius: 10px 10px 0 0; height: 220px; object-fit: cover; }
+  footer { background-color: #212529; color: #adb5bd; padding: 25px 0; margin-top: 60px; }
+  footer a { color: #adb5bd; text-decoration: none; }
+  footer a:hover { text-decoration: underline; color: #ffffff; }
+  .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 1080; }
+<style>
+  body {
+    scroll-behavior: smooth;
+    background-color: #fff8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* Navbar cálida */
+  .navbar {
+    background: linear-gradient(90deg, #ff914d, #ffb347);
+  }
+  .navbar-brand,
+  .nav-link {
+    color: #fff !important;
+    font-weight: bold;
+  }
+  .nav-link:hover {
+    color: #fbe9d0 !important;
+  }
+
+  /* Títulos */
+  .section-title {
+    margin-top: 60px;
+    margin-bottom: 30px;
+    font-weight: 800;
+    color: #5c3d2e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Precio */
+  .price {
+    font-weight: bold;
+    color: #d35400;
+    font-size: 1.1rem;
+  }
+
+  /* Tarjetas */
+  .card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    background-color: #fffaf5;
+  }
+  .card:hover {
+    transform: scale(1.03);
+  }
+  .card-img-top {
+    border-radius: 12px 12px 0 0;
+    height: 220px;
+    object-fit: cover;
+  }
+
+  /* Footer */
+  footer {
+    background-color: #5c3d2e;
+    color: #fbe9d0;
+    padding: 25px 0;
+  }
+  footer a {
+    color: #fbe9d0;
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+    color: #ffffff;
+  }
+
+  /* Botones */
+  .btn-primary {
+    background-color: #ff914d;
+    border: none;
+  }
+  .btn-primary:hover {
+    background-color: #e67e22;
+  }
+  .btn-success {
+    background-color: #27ae60;
+    border: none;
+  }
+  .btn-success:hover {
+    background-color: #1e8449;
+  }
+
+  /* Toast */
+  .toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1080;
+  }
+
+  /* Modal encabezado */
+  .modal-header {
+    background-color: #ff914d;
+    color: white;
+  }
+
+  /* FAQ */
+  .accordion-button:not(.collapsed) {
+    background-color: #ffe0c2;
+    color: #5c3d2e;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<div class="container">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <a href="#inicio" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-            <img src="assets/media/img/icon.png" alt="icono" height="32" class="me-2">
-            <h3 class="m-0">Tienda de Recetas</h3>
-        </a>
-        <ul class="nav nav-pills">
-            <li class="nav-item"><a href="#inicio" class="nav-link active">Inicio</a></li>
-            <li class="nav-item"><a href="#productos" class="nav-link">Productos</a></li>
-            <li class="nav-item"><a href="#recetas" class="nav-link">Recetas</a></li>
-            <li class="nav-item"><a href="#faq" class="nav-link">Preguntas Frecuentes</a></li>
-            <li class="nav-item"><a href="#acerca" class="nav-link">Acerca de Nosotros</a></li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#cartModal">🛒 Carrito <span id="cart-count" class="badge bg-success">0</span></a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#addRecipeModal">➕ Nueva Receta</a>
-            </li>
-        </ul>
-    </header>
-</div>
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#inicio">
+      <img src="assets/media/img/icon.png" alt="icono" height="32" class="me-2" /> Cocina Conectada
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a href="#productos" class="nav-link">Productos</a></li>
+        <li class="nav-item"><a href="#recetas" class="nav-link">Recetas</a></li>
+        <li class="nav-item"><a href="#faq" class="nav-link">Preguntas Frecuentes</a></li>
+        <li class="nav-item"><a href="#acerca" class="nav-link">Nosotros</a></li>
+        <li class="nav-item">
+          <a href="#" class="nav-link position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
+            🛒
+            <span id="cart-count" class="badge bg-success position-absolute top-0 start-100 translate-middle" style="font-size:0.75rem;min-width:20px;">0</span>
+          </a>
+        </li>
+        <li class="nav-item"><a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#addRecipeModal">➕ Nueva Receta</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 <!-- PRODUCTOS -->
 <div class="container" id="productos">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="lista-recetas"></div>
+  <h2 class="section-title">Productos Destacados</h2>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="lista-recetas"></div>
 </div>
 
 <!-- RECETAS -->
 <div class="container" id="recetas">
-    <h2 class="section-title">Recetas</h2>
-    <p>Aquí podrás ver y editar las recetas de tus platos.</p>
+  <h2 class="section-title">Recetas</h2>
+  <p>Aquí puedes buscar y explorar nuestras recetas disponibles.</p>
+  <input type="text" id="buscador" class="form-control mb-4" placeholder="Buscar receta por nombre..." />
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal fade" id="detalleModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Detalle de Receta</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body" id="detalle-body"></div>
+      <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button></div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL CARRITO -->
 <div class="modal fade" id="cartModal" tabindex="-1">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-      <div class="modal-header"><h5 class="modal-title">Carrito de Compras</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-header"><h5 class="modal-title">Carrito de Compras</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body" id="cart-items"></div>
       <div class="modal-footer">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#checkoutModal">Pagar</button>
+        <button class="btn btn-danger" onclick="vaciarCarrito()">Vaciar Carrito</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#pagoModal">💳 Pagar</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- MODAL PAGO -->
-<div class="modal fade" id="checkoutModal" tabindex="-1">
+<div class="modal fade" id="pagoModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header"><h5 class="modal-title">Finalizar Compra</h5></div>
+      <div class="modal-header"><h5 class="modal-title">Datos para Envío de Receta</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body">
-        <input type="text" class="form-control mb-2" placeholder="Nombre completo">
-        <input type="email" class="form-control mb-2" placeholder="Correo electrónico">
-        <input type="text" class="form-control mb-2" placeholder="Dirección de envío">
-        <select class="form-select mb-2">
-            <option selected>Método de pago</option>
-            <option value="visa">💳 Tarjeta VISA</option>
-            <option value="paypal">💲 PayPal</option>
-            <option value="yape">📱 Yape</option>
-            <option value="plin">📱 Plin</option>
-        </select>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-success" onclick="alert('Compra confirmada. ¡Gracias por tu pedido!')">Confirmar Compra</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL AGREGAR RECETA -->
-<div class="modal fade" id="addRecipeModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Agregar Nueva Receta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="form-receta">
-          <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" id="title" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea id="description" class="form-control"></textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Imagen (URL)</label>
-            <input type="text" id="imagen" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Precio (S/)</label>
-            <input type="number" id="price" class="form-control" step="0.01">
-          </div>
-          <button type="submit" class="btn btn-success">Guardar Receta</button>
+        <form id="form-pago">
+          <div class="mb-3"><label>Nombre Completo *</label><input type="text" id="nombreCliente" class="form-control" required></div>
+          <div class="mb-3"><label>Correo Electrónico *</label><input type="email" id="correoCliente" class="form-control" required></div>
+          <div class="mb-3"><label>Teléfono *</label><input type="tel" id="telefonoCliente" class="form-control" required></div>
+          <button type="submit" class="btn btn-success w-100">Confirmar Pago</button>
         </form>
-        <div id="mensaje" class="mt-3"></div>
       </div>
     </div>
   </div>
 </div>
 
-<script src="assets/js/bootstrap.bundle.min.js"></script>
+<!-- MODAL NUEVA RECETA -->
+<div class="modal fade" id="addRecipeModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <form id="form-receta" novalidate>
+        <div class="modal-header"><h5 class="modal-title">Agregar Nueva Receta</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label>Nombre *</label><input type="text" id="title" class="form-control" required></div>
+          <div class="mb-3"><label>Descripción</label><textarea id="description" class="form-control"></textarea></div>
+          <div class="mb-3"><label>Ingredientes (uno por línea)</label><textarea id="ingredients" class="form-control"></textarea></div>
+          <div class="mb-3"><label>Pasos</label><textarea id="steps" class="form-control"></textarea></div>
+          <div class="mb-3"><label>URL Imagen</label><input type="url" id="imagen" class="form-control"></div>
+          <div class="mb-3"><label>Precio (S/)</label><input type="number" id="price" class="form-control"></div>
+        </div>
+        <div class="modal-footer"><button type="submit" class="btn btn-primary">Guardar Receta</button></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- PREGUNTAS FRECUENTES -->
+<div class="container" id="faq">
+  <h2 class="section-title">Preguntas Frecuentes</h2>
+  <div class="accordion" id="faqAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">¿Las recetas incluyen ingredientes exactos?</button></h2>
+      <div id="faq1" class="accordion-collapse collapse show"><div class="accordion-body">Sí, cada receta incluye la lista completa de ingredientes y sus cantidades para que puedas prepararla fácilmente.</div></div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">¿Puedo solicitar recetas personalizadas?</button></h2>
+      <div id="faq2" class="accordion-collapse collapse"><div class="accordion-body">Claro, puedes enviarnos un mensaje con tus preferencias y crearemos una receta adaptada a tus necesidades.</div></div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">¿Las recetas son fáciles de seguir?</button></h2>
+      <div id="faq3" class="accordion-collapse collapse"><div class="accordion-body">Sí, todas están pensadas para que tanto principiantes como expertos puedan seguirlas sin dificultad.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ACERCA DE NOSOTROS -->
+<div class="container" id="acerca">
+  <h2 class="section-title">Acerca de Nosotros</h2>
+  <p>En <strong>Cocina Conectada</strong> somos una empresa joven y apasionada por la gastronomía. Nacimos con la misión de acercar recetas deliciosas y fáciles a todos, combinando tradición culinaria con tecnología para que cocinar sea una experiencia única.</p>
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center">
+  <div class="container">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+      <li class="nav-item"><a href="#inicio" class="nav-link px-2 text-secondary">Inicio</a></li>
+      <li class="nav-item"><a href="#productos" class="nav-link px-2 text-secondary">Productos</a></li>
+      <li class="nav-item"><a href="#recetas" class="nav-link px-2 text-secondary">Recetas</a></li>
+      <li class="nav-item"><a href="#faq" class="nav-link px-2 text-secondary">Preguntas Frecuentes</a></li>
+      <li class="nav-item"><a href="#acerca" class="nav-link px-2 text-secondary">Acerca de Nosotros</a></li>
+    </ul>
+    <p class="text-secondary">© 2025 Cocina Conectada - Todos los derechos reservados</p>
+  </div>
+</footer>
+
+<div class="toast-container" id="toast-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const API_URL = "https://recetas-backend-rab7.onrender.com";
-let carrito = [];
+let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+let recetas = [];
 
-// Cargar recetas
-async function cargarRecetas() {
-    try {
-        const respuesta = await fetch(`${API_URL}/recipes`);
-        if (!respuesta.ok) throw new Error("Error al obtener recetas");
-        const recetas = await respuesta.json();
-        mostrarRecetas(recetas);
-    } catch (error) {
-        console.error("Error cargando recetas:", error);
-    }
+function mostrarToast(mensaje, tipo="success") {
+  const toast=document.createElement("div");
+  toast.className=`toast align-items-center text-bg-${tipo} border-0 show`;
+  toast.innerHTML=`<div class="d-flex"><div class="toast-body">${mensaje}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+  document.getElementById("toast-container").appendChild(toast);
+  setTimeout(()=>toast.remove(),3500);
 }
+function actualizarCarritoUI(){localStorage.setItem("carrito",JSON.stringify(carrito));document.getElementById("cart-count").innerText=carrito.length;}
+async function cargarRecetas(){try{const res=await fetch(`${API_URL}/recipes`);recetas=await res.json();mostrarRecetas(recetas);}catch{mostrarToast("Error cargando recetas","danger");}}
+function mostrarRecetas(lista){const cont=document.getElementById("lista-recetas");cont.innerHTML="";lista.forEach(r=>{const card=document.createElement("div");card.className="col";card.innerHTML=`<div class="card h-100"><img src="${r.image||'assets/img/default.jpg'}" class="card-img-top"/><div class="card-body d-flex flex-column"><h5 class="card-title text-center">${r.title}</h5><p class="card-text flex-grow-1">${r.description||""}</p><p class="price">S/ ${r.price?r.price.toFixed(2):"0.00"}</p><div class="d-flex justify-content-between mt-auto"><button class="btn btn-outline-primary btn-sm" onclick="verDetalle('${r.id}')">Ver más</button><button class="btn btn-success btn-sm" onclick="agregarAlCarrito('${r.id}')">Agregar 🛒</button></div></div></div>`;cont.appendChild(card);});}
+function verDetalle(id){const receta=recetas.find(r=>r.id===id);const d=document.getElementById("detalle-body");d.innerHTML=`<h4>${receta.title}</h4><img src="${receta.image||'assets/img/default.jpg'}" class="img-fluid mb-3 rounded"/><p><strong>Descripción:</strong> ${receta.description||"No disponible"}</p><p><strong>Precio:</strong> S/ ${receta.price?receta.price.toFixed(2):"0.00"}</p><hr/><h5>Ingredientes:</h5><ul>${receta.ingredients?.map(i=>`<li>${i}</li>`).join("")||"<li>No disponibles</li>"}</ul><h5>Pasos:</h5><ol>${receta.steps?.map(s=>`<li>${s}</li>`).join("")||"<li>No disponibles</li>"}</ol>`;new bootstrap.Modal(document.getElementById("detalleModal")).show();}
+function agregarAlCarrito(id){carrito.push(id);actualizarCarritoUI();mostrarToast("Producto añadido al carrito");}
+function mostrarCarrito(){const cont=document.getElementById("cart-items");cont.innerHTML="";if(!carrito.length)return cont.innerHTML='<p class="text-center">El carrito está vacío</p>';const cantidades=carrito.reduce((acc,id)=>{acc[id]=(acc[id]||0)+1;return acc;},{});Object.entries(cantidades).forEach(([id,cantidad])=>{const receta=recetas.find(r=>r.id===id);cont.innerHTML+=`<div class="d-flex justify-content-between border-bottom py-2"><div><strong>${receta.title}</strong><br/>Cantidad: ${cantidad} <br/>Precio unitario: S/ ${receta.price?.toFixed(2)||"0.00"}</div><button class="btn btn-sm btn-outline-danger" onclick="eliminarDelCarrito('${id}')">Eliminar</button></div>`;});}
+function eliminarDelCarrito(id){const index=carrito.indexOf(id);if(index!==-1)carrito.splice(index,1);actualizarCarritoUI();mostrarCarrito();}
+function vaciarCarrito(){carrito=[];actualizarCarritoUI();mostrarCarrito();}
 
-<!-- Mostrar recetas -->
-function mostrarRecetas(recetas) {
-    const contenedor = document.getElementById("lista-recetas");
-    contenedor.innerHTML = "";
-    recetas.forEach(receta => {
-        const tarjeta = document.createElement("div");
-        tarjeta.className = "col";
-        tarjeta.innerHTML = `
-            <div class="card">
-                <img src="${receta.imagen || 'assets/media/img/default.jpg'}"
-                     onerror="this.src='assets/media/img/default.jpg'"
-                     class="card-img-top" style="height: 250px; object-fit:cover;">
-                <div class="card-body">
-                    <h5 class="card-title text-center">${receta.title}</h5>
-                    <p class="card-text">${receta.description || ''}</p>
-                    <p class="price">S/ ${receta.price ? receta.price.toFixed(2) : '0.00'}</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <button class="btn btn-sm btn-outline-secondary" onclick="agregarAlCarrito('${receta.id}')">Comprar</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        contenedor.appendChild(tarjeta);
-    });
-}
-
-// Agregar al carrito
-function agregarAlCarrito(id) {
-    carrito.push(id);
-    document.getElementById("cart-count").innerText = carrito.length;
-}
-
-// Guardar receta
-document.getElementById("form-receta").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const receta = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        imagen: document.getElementById("imagen").value || "assets/img/default.jpg",
-        price: parseFloat(document.getElementById("price").value) || 0
-    };
-
-    try {
-        const res = await fetch(`${API_URL}/recipes/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(receta)
-        });
-
-        if (!res.ok) throw new Error("Error al guardar receta");
-
-        const data = await res.json();
-        document.getElementById("mensaje").innerHTML = `
-            <div class="alert alert-success">
-                ✅ Receta agregada correctamente (ID: ${data.id})
-            </div>
-        `;
-        this.reset();
-        cargarRecetas();
-    } catch (error) {
-        document.getElementById("mensaje").innerHTML = `
-            <div class="alert alert-danger">
-                ❌ Error: ${error.message}
-            </div>
-        `;
-    }
+// Procesar pago con datos
+document.getElementById("form-pago").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!carrito.length) return mostrarToast("El carrito está vacío","warning");
+  const nombre=document.getElementById("nombreCliente").value.trim();
+  const correo=document.getElementById("correoCliente").value.trim();
+  const telefono=document.getElementById("telefonoCliente").value.trim();
+  mostrarToast(`Gracias ${nombre}, tu compra fue procesada. Te enviaremos las recetas a ${correo} y te contactaremos al ${telefono}.`);
+  carrito=[];
+  actualizarCarritoUI();
+  mostrarCarrito();
+  bootstrap.Modal.getInstance(document.getElementById("pagoModal")).hide();
 });
 
-document.addEventListener("DOMContentLoaded", cargarRecetas);
+document.getElementById("form-receta").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const nuevaReceta={title:document.getElementById("title").value.trim(),description:document.getElementById("description").value.trim(),ingredients:document.getElementById("ingredients").value.split("\n").map(i=>i.trim()).filter(Boolean),steps:document.getElementById("steps").value.split("\n").map(s=>s.trim()).filter(Boolean),image:document.getElementById("imagen").value.trim()||"assets/img/default.jpg",price:parseFloat(document.getElementById("price").value)||0};
+  try{await fetch(`${API_URL}/recipes/`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(nuevaReceta)});mostrarToast("Receta guardada correctamente");e.target.reset();bootstrap.Modal.getInstance(document.getElementById("addRecipeModal")).hide();cargarRecetas();}catch{mostrarToast("Error guardando receta","danger");}
+});
+document.getElementById("buscador").addEventListener("input",e=>{const t=e.target.value.toLowerCase();mostrarRecetas(recetas.filter(r=>r.title.toLowerCase().includes(t)));});
+document.addEventListener("DOMContentLoaded",()=>{cargarRecetas();actualizarCarritoUI();document.getElementById("cartModal").addEventListener("show.bs.modal",mostrarCarrito);});
 </script>
 </body>
 </html>
