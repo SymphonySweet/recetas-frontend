@@ -254,7 +254,9 @@
 <!-- ACERCA DE NOSOTROS -->
 <div class="container" id="acerca">
   <h2 class="section-title">Acerca de Nosotros</h2>
-  <p>En <strong>Cocina Conectada</strong> somos una empresa joven y apasionada por la gastronomía. Nacimos con la misión de acercar recetas deliciosas y fáciles a todos, combinando tradición culinaria con tecnología para que cocinar sea una experiencia única.</p>
+  <p>En <strong>Cocina Conectada</strong> Somos una empresa joven, apasionada por la gastronomía y dedicada a llevarte lo mejor de la cocina a tu hogar.
+Por la compra de cualquiera de nuestras recetas, recibirás tu receta impresa, un kit de cocina gratuito y nuestro ingrediente secreto para que vivas una experiencia culinaria única.
+Combinamos tradición y tecnología para que cocinar sea fácil, divertido y delicioso.</p>
 </div>
 
 <!-- FOOTER -->
@@ -287,7 +289,29 @@ function mostrarToast(mensaje, tipo="success") {
 }
 function actualizarCarritoUI(){localStorage.setItem("carrito",JSON.stringify(carrito));document.getElementById("cart-count").innerText=carrito.length;}
 async function cargarRecetas(){try{const res=await fetch(`${API_URL}/recipes`);recetas=await res.json();mostrarRecetas(recetas);}catch{mostrarToast("Error cargando recetas","danger");}}
-function mostrarRecetas(lista){const cont=document.getElementById("lista-recetas");cont.innerHTML="";lista.forEach(r=>{const card=document.createElement("div");card.className="col";card.innerHTML=`<div class="card h-100"><img src="${r.image||'assets/img/default.jpg'}" class="card-img-top"/><div class="card-body d-flex flex-column"><h5 class="card-title text-center">${r.title}</h5><p class="card-text flex-grow-1">${r.description||""}</p><p class="price">S/ ${r.price?r.price.toFixed(2):"0.00"}</p><div class="d-flex justify-content-between mt-auto"><button class="btn btn-outline-primary btn-sm" onclick="verDetalle('${r.id}')">Ver más</button><button class="btn btn-success btn-sm" onclick="agregarAlCarrito('${r.id}')">Agregar 🛒</button></div></div></div>`;cont.appendChild(card);});}
+function mostrarRecetas(lista){
+  const cont=document.getElementById("lista-recetas");
+  cont.innerHTML="";
+  lista.forEach(r=>{
+    const card=document.createElement("div");
+    card.className="col";
+    card.innerHTML=`
+      <div class="card h-100">
+        <img src="${r.image||'assets/img/default.jpg'}" class="card-img-top"/>
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title text-center">${r.title}</h5>
+          <p class="card-text flex-grow-1">${r.description||""}</p>
+          <p class="price">S/ ${r.price ? r.price.toFixed(2) : "0.00"}</p>
+          <div class="d-flex justify-content-between mt-auto flex-wrap gap-1">
+            <button class="btn btn-outline-primary btn-sm" onclick="verDetalle('${r.id}')">Ver más</button>
+            <button class="btn btn-success btn-sm" onclick="agregarAlCarrito('${r.id}')">Agregar 🛒</button>
+            <button class="btn btn-danger btn-sm" onclick="eliminarReceta('${r.id}')">Eliminar</button>
+          </div>
+        </div>
+      </div>`;
+    cont.appendChild(card);
+  });
+}
 function verDetalle(id){const receta=recetas.find(r=>r.id===id);const d=document.getElementById("detalle-body");d.innerHTML=`<h4>${receta.title}</h4><img src="${receta.image||'assets/img/default.jpg'}" class="img-fluid mb-3 rounded"/><p><strong>Descripción:</strong> ${receta.description||"No disponible"}</p><p><strong>Precio:</strong> S/ ${receta.price?receta.price.toFixed(2):"0.00"}</p><hr/><h5>Ingredientes:</h5><ul>${receta.ingredients?.map(i=>`<li>${i}</li>`).join("")||"<li>No disponibles</li>"}</ul><h5>Pasos:</h5><ol>${receta.steps?.map(s=>`<li>${s}</li>`).join("")||"<li>No disponibles</li>"}</ol>`;new bootstrap.Modal(document.getElementById("detalleModal")).show();}
 function agregarAlCarrito(id){carrito.push(id);actualizarCarritoUI();mostrarToast("Producto añadido al carrito");}
 function mostrarCarrito(){const cont=document.getElementById("cart-items");cont.innerHTML="";if(!carrito.length)return cont.innerHTML='<p class="text-center">El carrito está vacío</p>';const cantidades=carrito.reduce((acc,id)=>{acc[id]=(acc[id]||0)+1;return acc;},{});Object.entries(cantidades).forEach(([id,cantidad])=>{const receta=recetas.find(r=>r.id===id);cont.innerHTML+=`<div class="d-flex justify-content-between border-bottom py-2"><div><strong>${receta.title}</strong><br/>Cantidad: ${cantidad} <br/>Precio unitario: S/ ${receta.price?.toFixed(2)||"0.00"}</div><button class="btn btn-sm btn-outline-danger" onclick="eliminarDelCarrito('${id}')">Eliminar</button></div>`;});}
@@ -314,6 +338,21 @@ document.getElementById("form-receta").addEventListener("submit",async e=>{
   try{await fetch(`${API_URL}/recipes/`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(nuevaReceta)});mostrarToast("Receta guardada correctamente");e.target.reset();bootstrap.Modal.getInstance(document.getElementById("addRecipeModal")).hide();cargarRecetas();}catch{mostrarToast("Error guardando receta","danger");}
 });
 document.getElementById("buscador").addEventListener("input",e=>{const t=e.target.value.toLowerCase();mostrarRecetas(recetas.filter(r=>r.title.toLowerCase().includes(t)));});
+
+async function eliminarReceta(id) {
+  if (!confirm("¿Estás seguro de que quieres eliminar esta receta?")) return;
+  try {
+    const res = await fetch(`${API_URL}/recipes/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Error eliminando receta");
+    mostrarToast("Receta eliminada correctamente", "success");
+    cargarRecetas();
+  } catch (error) {
+    mostrarToast("No se pudo eliminar la receta", "danger");
+  }
+}
+
 document.addEventListener("DOMContentLoaded",()=>{cargarRecetas();actualizarCarritoUI();document.getElementById("cartModal").addEventListener("show.bs.modal",mostrarCarrito);});
 </script>
 </body>
